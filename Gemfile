@@ -29,7 +29,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   unless ENV['TRAVIS']
     gem 'ruby-debug', :platform => :mri_18
-    gem 'ruby-debug19', :platform => :mri_19, :require => 'ruby-debug'
+    # gem 'ruby-debug19', :platform => :mri_19, :require => 'ruby-debug'
   end
 end
 
