@@ -45,6 +45,8 @@ end
 if smtp = Errbit::Config.smtp_settings
   ActionMailer::Base.delivery_method = :smtp
   ActionMailer::Base.smtp_settings = smtp
+else
+  ActionMailer::Base.delivery_method = :sendmail
 end
 
 # Set config specific values
