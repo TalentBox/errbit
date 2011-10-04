@@ -45,4 +45,3 @@ end
 group :heroku do
   gem 'thin'
 end
-
