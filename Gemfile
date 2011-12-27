@@ -49,3 +49,4 @@ group :heroku do
   gem 'unicorn'
 end
 
+gem "thin"
