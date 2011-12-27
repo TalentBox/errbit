@@ -1,6 +1,22 @@
 module ApplicationHelper
   def message_graph(problem)
-    create_percentage_table_for(problem) {|notice| notice.message}
+    create_percentage_table_for(problem.messages)
+  end
+
+  def generate_problem_ical(notices)
+    RiCal.Calendar do |cal|
+      notices.each_with_index do |notice,idx|
+        cal.event do |event|
+          event.summary     = "#{idx+1} #{notice.message.to_s}"
+          event.description = notice.request['url']
+          event.dtstart     = notice.created_at.utc
+          event.dtend       = notice.created_at.utc + 60.minutes
+          event.organizer   = notice.server_environment && notice.server_environment["hostname"]
+          event.location    = notice.server_environment && notice.server_environment["project-root"]
+          event.url         = app_err_url(:app_id => notice.problem.app.id, :id => notice.problem)
+        end
+      end
+    end.to_s
   end
 
   def generate_ical(deploys)
@@ -9,8 +25,8 @@ module ApplicationHelper
         cal.event do |event|
           event.summary     = "#{idx+1} #{deploy.repository.to_s}"
           event.description = deploy.revision.to_s
-          event.dtstart     = deploy.created_at
-          event.dtend       = deploy.created_at + 60.minutes
+          event.dtstart     = deploy.created_at.utc
+          event.dtend       = deploy.created_at.utc + 60.minutes
           event.location    = deploy.environment.to_s
           event.organizer   = deploy.username.to_s
         end
@@ -19,36 +35,20 @@ module ApplicationHelper
   end
 
   def user_agent_graph(problem)
-    create_percentage_table_for(problem) {|notice| pretty_user_agent(notice.user_agent)}
-  end
-
-  def pretty_user_agent(user_agent)
-    (user_agent.nil? || user_agent.none?) ? "N/A" : "#{user_agent.browser} #{user_agent.version}"
+    create_percentage_table_for(problem.user_agents)
   end
 
   def tenant_graph(problem)
-    create_percentage_table_for(problem) {|notice| get_host(notice.request['url'])}
+    create_percentage_table_for(problem.hosts)
   end
 
-  def get_host(url)
-    begin
-      uri = url && URI.parse(url)
-      uri.blank? ? "N/A" : uri.host
-    rescue URI::InvalidURIError
-      "N/A"
-    end
+  def create_percentage_table_for(collection)
+    create_percentage_table_from_tallies(tally(collection))
   end
 
-
-  def create_percentage_table_for(problem, &block)
-    tallies = tally(problem.notices, &block)
-    create_percentage_table_from_tallies(tallies, :total => problem.notices.count)
-  end
-
-  def tally(collection, &block)
-    collection.inject({}) do |tallies, item|
-      value = yield item
-      tallies[value] = (tallies[value] || 0) + 1
+  def tally(collection)
+    collection.values.inject({}) do |tallies, tally|
+      tallies[tally['value']] = tally['count']
       tallies
     end
   end
