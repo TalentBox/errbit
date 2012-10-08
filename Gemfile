@@ -102,3 +102,4 @@ group :assets do
 end
 
 gem 'turbo-sprockets-rails3'
+
