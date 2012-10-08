@@ -1,53 +1,104 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.10'
+gem 'rails', '3.2.8'
+gem 'mongoid', '~> 2.4.10'
+gem 'mongoid_rails_migrations'
+gem 'devise', '~> 1.5.3'
 gem 'nokogiri'
-gem 'mongoid', '~> 2.2.2'
-
 gem 'haml'
 gem 'htmlentities', "~> 4.3.0"
-gem 'devise', '~> 1.4.0'
-gem 'lighthouse-api'
-gem 'oruen_redmine_client', :require => 'redmine_client'
-gem 'mongoid_rails_migrations'
+gem 'rack-ssl', :require => 'rack/ssl'   # force SSL
+
 gem 'useragent', '~> 0.3.1'
-gem 'pivotal-tracker'
-gem 'ruby-fogbugz', :require => 'fogbugz'
-gem 'octokit', '0.6.4'
 gem 'inherited_resources'
 gem 'SystemTimer', :platform => :ruby_18
-gem 'hoptoad_notifier', "~> 2.4"
 gem 'actionmailer_inline_css', "~> 1.3.0"
 gem 'kaminari'
 gem 'rack-ssl-enforcer'
+gem 'fabrication', "~> 1.3.0"   # Used for both tests and demo data
+gem 'rails_autolink', '~> 1.0.9'
+# Please don't update hoptoad_notifier to airbrake.
+# It's for internal use only, and we monkeypatch certain methods
+gem 'hoptoad_notifier', "~> 2.4"
+
+
+# Remove / comment out any of the gems below if you want to disable
+# a given issue tracker, notification service, or authentication.
+
+# Issue Trackers
+# ---------------------------------------
+# Lighthouse
+gem 'lighthouse-api'
+# Redmine
+gem 'oruen_redmine_client', :require => 'redmine_client'
+# Pivotal Tracker
+gem 'pivotal-tracker'
+# Fogbugz
+gem 'ruby-fogbugz', :require => 'fogbugz'
+# Github Issues
+gem 'octokit', '~> 1.0.0'
+
+# Notification services
+# ---------------------------------------
+# Campfire
+gem 'campy'
+# Hipchat
+gem 'hipchat'
+gem 'hoi'
+
+# Authentication
+# ---------------------------------------
+# GitHub OAuth
+gem 'omniauth-github'
+
 
 platform :ruby do
-  gem 'mongo', '= 1.3.1'
-  gem 'bson', '= 1.3.1'
-  gem 'bson_ext', '= 1.3.1'
+  gem 'mongo', '= 1.6.2'
+  gem 'bson', '= 1.6.2'
+  gem 'bson_ext', '= 1.6.2'
 end
 
+gem 'omniauth'
+gem 'oa-core'
 gem 'ri_cal'
+gem 'yajl-ruby', :require => "yajl"
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.6'
   gem 'webmock', :require => false
-  gem 'fabrication'
-  unless ENV['TRAVIS']
+  unless ENV["CI"]
     gem 'ruby-debug', :platform => :mri_18
-    # gem 'ruby-debug19', :platform => :mri_19, :require => 'ruby-debug'
+    gem 'debugger', :platform => :mri_19
+    gem 'pry'
+    gem 'pry-rails'
   end
-  # gem 'rpm_contrib', :git => "git://github.com/bensymonds/rpm_contrib.git", :branch => "mongo-1.4.0_update"
+#  gem 'rpm_contrib'
+#  gem 'newrelic_rpm'
+  gem 'capistrano'
 end
 
 group :test do
+  gem 'capybara'
+  gem 'launchy'
   gem 'rspec', '~> 2.6'
   gem 'database_cleaner', '~> 0.6.0'
   gem 'email_spec'
+  gem 'timecop'
 end
 
 group :heroku do
   gem 'unicorn'
 end
 
-gem "thin"
+# Use thin for development
+gem 'thin'
+
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'execjs'
+  gem 'therubyracer', :platform => :ruby  # C Ruby (MRI) or Rubinius, but NOT Windows
+  gem 'uglifier',     '>= 1.0.3'
+end
+
+gem 'turbo-sprockets-rails3'

@@ -14,6 +14,7 @@ class IssueTracker
   field :username, :type => String
   field :password, :type => String
   field :ticket_properties, :type => String
+  field :subdomain, :type => String
 
   validate :check_params
 
@@ -27,5 +28,12 @@ class IssueTracker
   # Allows us to set the issue tracker class from a single form.
   def type; self._type; end
   def type=(t); self._type=t; end
+
+  def url; nil; end
+
+  # Retrieve tracker label from either class or instance.
+  Label = ''
+  def self.label; self::Label; end
+  def label; self.class.label; end
 end
 
