@@ -5,8 +5,11 @@
   = f.text_field :name
 
 %div
-  = f.label :github_url
-  = f.text_field :github_url
+  = f.label :github_repo
+  = f.text_field :github_repo, :placeholder => "errbit/errbit from https://github.com/errbit/errbit"
+%div
+  = f.label :bitbucket_repo
+  = f.text_field :bitbucket_repo, :placeholder => "errbit/errbit from https://bitbucket.org/errbit/errbit"
 
 %fieldset
   %legend Notifications
@@ -23,7 +26,7 @@
     = f.label :notify_on_deploys, 'Notify on deploys'
 
 %div.checkbox
-  = f.check_box :notify_all_users, 'data-hide-when-checked' => '.watchers.nested-wrapper'
+  = f.check_box :notify_all_users
   = f.label :notify_all_users, 'Send notifications to all users'
 
 
@@ -46,4 +49,5 @@
   = f.label :resolve_errs_on_deploy, 'Resolve errs on deploy'
 
 = render "issue_tracker_fields", :f => f
+= render "service_notification_fields", :f => f
 
