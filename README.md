@@ -473,4 +473,3 @@ Copyright
 ---------
 
 Copyright (c) 2010-2011 Jared Pace. See LICENSE for details.
-
