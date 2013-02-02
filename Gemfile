@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '3.2.11'
 gem 'mongoid', '~> 2.4.10'
 gem 'mongoid_rails_migrations'
-gem 'devise', '~> 1.5.3'
+gem 'devise', '~> 1.5.4'
 gem 'haml'
 gem 'htmlentities', "~> 4.3.0"
 gem 'rack-ssl', :require => 'rack/ssl'   # force SSL
@@ -54,6 +54,8 @@ gem 'xmpp4r'
 gem 'hoi'
 # Pushover (iOS Push notifications)
 gem 'rushover'
+# Hubot
+gem 'httparty'
 
 # Authentication
 # ---------------------------------------
@@ -93,12 +95,12 @@ group :test do
   gem 'timecop'
 end
 
-group :heroku do
+group :heroku, :production do
   gem 'unicorn'
 end
 
 # Use thin for development
-gem 'thin'
+gem 'thin', :group => :development, :platform => :ruby
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -107,4 +109,5 @@ group :assets do
   gem 'therubyracer', :platform => :ruby  # C Ruby (MRI) or Rubinius, but NOT Windows
   gem 'uglifier',     '>= 1.0.3'
   gem 'underscore-rails'
+  gem 'turbo-sprockets-rails3'
 end
