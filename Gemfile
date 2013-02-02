@@ -95,12 +95,11 @@ group :test do
   gem 'timecop'
 end
 
-group :heroku, :production do
+group :heroku do
   gem 'unicorn'
 end
 
-# Use thin for development
-gem 'thin', :group => :development, :platform => :ruby
+gem 'thin'
 
 # Gems used only for assets and not required
 # in production environments by default.
